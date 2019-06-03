@@ -8,7 +8,6 @@
 #   License: LGPL 2.1 or later
 #
 
-
 import os 
 import sys
 import regex as re
@@ -203,7 +202,7 @@ def parse_scad_callables(scad_code_str):
 
     # Also note: this accepts: 'module x(arg) =' and 'function y(arg) {', both
     # of which are incorrect syntax
-    mod_re = r'(?mxs)^\s*(?:module|function)\s+(?P<callable_name>\w+)\s*\((?P<all_args>.*?)\)\s*(?:{|=)'
+    mod_re = r'(?mxs)^\s*(?:module|function)\s+(?P<callable_name>[a-zA-Z_]\w+)\s*\((?P<all_args>.*?)\)\s*(?:{|=)'
 
     # See https://github.com/SolidCode/SolidPython/issues/95; Thanks to https://github.com/Torlos
     args_re = r'(?mxs)(?P<arg_name>\w+)(?:\s*=\s*(?P<default_val>([\w.\"\s\?:\-+\\\/*]+|\((?>[^()]|(?2))*\)|\[(?>[^\[\]]|(?2))*\])+))?(?:,|$)'

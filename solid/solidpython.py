@@ -243,17 +243,22 @@ class OpenSCADObject:
             # about the list, so skip single-member tuples containing lists
             if len(child) == 1 and isinstance(child[0], (list, tuple)):
                 child = child[0]
-                [self.add(c) for c in child]
-            else:
-                if not ((isinstance(child[1], int) and child[1]==0) or isinstance(child[1],OpenSCADObject)):
-                    raise TypeError("unsupported operand type(s) for +: '%s' and '%s'" % ('solid.objects',type(child[1]).__name__)) 
+            for item in child:
+                if isinstance(item, OpenSCADObject) or isinstance(item, int): 
+                    self.add(item)
+                else: 
+                    raise TypeError("unsupported operand type(s) for + (union): 'solid.object' and '%s'" % type(child).__name__)     
+            #[self.add(c) for c in child]
         elif isinstance(child, int):
             # Allowing for creating object by adding to 0 (as in sum())
             if child != 0:
-                raise ValueError
+                raise TypeError("unsupported operand type(s) for +: 'solid.object' and 'int'")
         else:
-            self.children.append(child)  # type: ignore
-            child.set_parent(self)  # type: ignore
+            if hasattr(child, 'set_parent'):
+                self.children.append(child)  # type: ignore
+                child.set_parent(self)  # type: ignore
+            else:
+                raise TypeError("unsupported operand type(s) for +: 'solid.object' and '%s'" % type(child).__name__)     
         return self                  
 
     def set_parent(self, parent: "OpenSCADObject"):

@@ -247,7 +247,7 @@ class OpenSCADObject:
                 if isinstance(item, OpenSCADObject) or isinstance(item, int): 
                     self.add(item)
                 else: 
-                    raise TypeError("unsupported operand type(s) for + (union): 'solid.object' and '%s'" % type(child).__name__)     
+                    raise TypeError("unsupported operand type(s) for + (union): 'solid.object' and '%s'" % type(item).__name__)     
             #[self.add(c) for c in child]
         elif isinstance(child, int):
             # Allowing for creating object by adding to 0 (as in sum())

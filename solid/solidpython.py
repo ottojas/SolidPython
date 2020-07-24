@@ -230,6 +230,14 @@ class OpenSCADObject:
 
         return s
 
+    def add(self, child: Union["OpenSCADObject", Sequence["OpenSCADObject"]]) -> "OpenSCADObject":
+        """
+        if child is a single object, assume it's an OpenSCADObjects and 
+        add it to self.children
+
+        if child is a list, assume its members are all OpenSCADObjects and
+        add them all to self.children
+        """
         if isinstance(child, (list, tuple)):
             # __call__ passes us a list inside a tuple, but we only care
             # about the list, so skip single-member tuples containing lists
@@ -238,7 +246,7 @@ class OpenSCADObject:
                 [self.add(c) for c in child]
             else:
                 if not ((isinstance(child[1], int) and child[1]==0) or isinstance(child[1],OpenSCADObject)):
-                    raise TypeError("unsupported operand type(s) for +: 'solid.object' and '%s'" % type(child[1])) 
+                    raise TypeError("unsupported operand type(s) for +: '%s' and '%s'" % ('solid.objects',type(child[1]).__name__)) 
         elif isinstance(child, int):
             # Allowing for creating object by adding to 0 (as in sum())
             if child != 0:
@@ -246,7 +254,7 @@ class OpenSCADObject:
         else:
             self.children.append(child)  # type: ignore
             child.set_parent(self)  # type: ignore
-        return self         
+        return self                  
 
     def set_parent(self, parent: "OpenSCADObject"):
         self.parent = parent
